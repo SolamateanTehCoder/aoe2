@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AoE II: The Conquerors Cheat Code Manager</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Cinzel', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            aoe: {
+              gold: '#D4AF37',
+              goldHover: '#F3E5AB',
+              darkBg: '#0F0D0C',
+              cardBg: '#1A1614',
+              cardBorder: '#3D3126',
+              accentRed: '#8B0000',
+              accentRedHover: '#A52A2A',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar for medieval aesthetic */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f0d0c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #3d3126;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d4af37;
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #FFF099 0%, #D4AF37 50%, #997A15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-aoe-darkBg text-amber-100 font-sans min-h-screen flex flex-col selection:bg-amber-500 selection:text-black">
+
+  <!-- Header Section -->
+  <header class="border-b border-aoe-cardBorder bg-neutral-950/80 backdrop-blur sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 py-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3 text-center md:text-left">
+        <div class="w-10 h-10 rounded border-2 border-aoe-gold bg-amber-950/50 flex items-center justify-center text-aoe-gold font-serif font-bold text-xl shadow-[0_0_10px_rgba(212,175,55,0.3)]">
+          II
+        </div>
+        <div>
+          <h1 class="font-serif font-black text-xl sm:text-2xl tracking-wide gold-gradient-text">
+            AGE OF EMPIRES II
+          </h1>
+          <p class="text-xs text-amber-400/70 tracking-wider uppercase font-semibold">
+            The Conquerors • Cheat Manager
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick How-To Instructions -->
+      <div class="bg-amber-950/30 border border-amber-900/50 rounded-lg px-4 py-2 text-xs text-amber-200/80 flex items-center gap-2 max-w-md">
+        <span class="text-aoe-gold font-bold text-sm">💡 How to use:</span>
+        <span>Press <kbd class="px-1.5 py-0.5 bg-neutral-800 rounded text-amber-300 font-mono border border-neutral-700">ENTER</kbd> in game, click any card below to copy, paste with <kbd class="px-1.5 py-0.5 bg-neutral-800 rounded text-amber-300 font-mono border border-neutral-700">CTRL+V</kbd>, then press <kbd class="px-1.5 py-0.5 bg-neutral-800 rounded text-amber-300 font-mono border border-neutral-700">ENTER</kbd> again!</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-grow w-full">
+
+    <!-- Controls Bar: Search & Category Filter -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+      
+      <!-- Category Tabs -->
+      <div class="flex flex-wrap gap-2 w-full md:w-auto justify-center sm:justify-start" id="categoryTabs">
+        <button onclick="filterCategory('all')" id="tab-all" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all border border-aoe-gold bg-aoe-gold text-black shadow-[0_0_12px_rgba(212,175,55,0.2)]">
+          All Cheats
+        </button>
+        <button onclick="filterCategory('resource')" id="tab-resource" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all border border-aoe-cardBorder bg-aoe-cardBg text-amber-200/80 hover:border-aoe-gold hover:text-amber-100">
+          🌾 Resources
+        </button>
+        <button onclick="filterCategory('units')" id="tab-units" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all border border-aoe-cardBorder bg-aoe-cardBg text-amber-200/80 hover:border-aoe-gold hover:text-amber-100">
+          🏎️ Secret Units
+        </button>
+        <button onclick="filterCategory('game')" id="tab-game" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all border border-aoe-cardBorder bg-aoe-cardBg text-amber-200/80 hover:border-aoe-gold hover:text-amber-100">
+          🗺️ Map & Match
+        </button>
+      </div>
+
+      <!-- Search Input -->
+      <div class="relative w-full md:w-72">
+        <input 
+          type="text" 
+          id="searchInput" 
+          oninput="handleSearch()"
+          placeholder="Search cheat code or effect..." 
+          class="w-full bg-neutral-900 border border-aoe-cardBorder rounded-lg px-4 py-2 pl-10 text-sm text-amber-100 placeholder-amber-200/40 focus:outline-none focus:border-aoe-gold transition-colors"
+        >
+        <svg class="w-4 h-4 absolute left-3 top-3 text-amber-200/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Cheat Cards Grid -->
+    <div id="cheatGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Generated dynamically by JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="noResults" class="hidden text-center py-16">
+      <div class="text-4xl mb-3">🛡️</div>
+      <h3 class="font-serif text-lg text-amber-200/80">No cheat codes found</h3>
+      <p class="text-xs text-amber-200/50 mt-1">Try tweaking your search term or category filter.</p>
+    </div>
+  </main>
+
+  <!-- Toast Notification -->
+  <div 
+    id="toast" 
+    class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 ease-out bg-amber-950 border-2 border-aoe-gold text-amber-100 px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50 pointer-events-none"
+  >
+    <span class="text-aoe-gold text-xl">⚔️</span>
+    <div>
+      <div class="font-bold text-sm text-aoe-gold" id="toastTitle">Copied to Clipboard!</div>
+      <div class="text-xs font-mono text-amber-200/90" id="toastCode">"cheat code"</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-aoe-cardBorder/50 py-6 text-center text-xs text-amber-200/40">
+    <p>Age of Empires II: The Conquerors is a trademark of Microsoft Corporation.</p>
+    <p class="mt-1">Built for quick tactical deployment on the battlefields of 1999 & 2000 graphics!</p>
+  </footer>
+
+  <script>
+    // Cheat Codes Dataset (Excluding 'ninjalui' per requirement)
+    const cheats = [
+      // Resource Cheats
+      {
+        code: "cheese steak jimmy's",
+        category: "resource",
+        categoryLabel: "Resources",
+        description: "Adds +10,000 Food instantly to your empire's stockpiles.",
+        icon: "🥩"
+      },
+      {
+        code: "lumberjack",
+        category: "resource",
+        categoryLabel: "Resources",
+        description: "Adds +10,000 Wood to your stockpiles for rapid construction.",
+        icon: "🪵"
+      },
+      {
+        code: "robin hood",
+        category: "resource",
+        categoryLabel: "Resources",
+        description: "Adds +10,000 Gold to treasury (Works in The Conquerors).",
+        icon: "💰"
+      },
+      {
+        code: "rock on",
+        category: "resource",
+        categoryLabel: "Resources",
+        description: "Adds +10,000 Stone to build massive walls and castles.",
+        icon: "🪨"
+      },
+
+      // Units & Secret Units
+      {
+        code: "how do you turn this on",
+        category: "units",
+        categoryLabel: "Secret Unit",
+        description: "Spawns the iconic Cobra Car at your Town Center. Extreme speed & firepower.",
+        icon: "🏎️"
+      },
+      {
+        code: "to smithereens",
+        category: "units",
+        categoryLabel: "Secret Unit",
+        description: "Spawns a Saboteur unit capable of devastating structural demolition.",
+        icon: "💣"
+      },
+      {
+        code: "i love the monkey head",
+        category: "units",
+        categoryLabel: "Secret Unit",
+        description: "Spawns a VMDL (naked villager). Extremely fast scout unit.",
+        icon: "🐒"
+      },
+      {
+        code: "alpaca simulator",
+        category: "units",
+        categoryLabel: "Secret Unit",
+        description: "Spawns 'Alfred the Alpaca', a super-powerful melee unit.",
+        icon: "🦙"
+      },
+      {
+        code: "furious the monkey boy",
+        category: "units",
+        categoryLabel: "Secret Unit",
+        description: "Spawns a tiny monkey that destroys buildings in 1-2 hits.",
+        icon: "🦍"
+      },
+
+      // Map & Match Controls
+      {
+        code: "marco",
+        category: "game",
+        categoryLabel: "Map & Match",
+        description: "Reveals the entire map (toggles map visibility on/off).",
+        icon: "👁️"
+      },
+      {
+        code: "polo",
+        category: "game",
+        categoryLabel: "Map & Match",
+        description: "Removes Fog of War (toggles shadowed areas on/off).",
+        icon: "☀️"
+      },
+      {
+        code: "i r winner",
+        category: "game",
+        categoryLabel: "Map & Match",
+        description: "Instantly awards you victory for the current match.",
+        icon: "👑"
+      },
+      {
+        code: "resign",
+        category: "game",
+        categoryLabel: "Map & Match",
+        description: "Instantly forfeit and lose the game.",
+        icon: "🏳️"
+      },
+      {
+        code: "black death",
+        category: "game",
+        categoryLabel: "Map & Match",
+        description: "Instantly destroys all opponent civilizations.",
+        icon: "💀"
+      },
+      {
+        code: "wimpywimpywimpy",
+        category: "game",
+        categoryLabel: "Map & Match",
+        description: "Destroys all your own units and buildings (Suicide).",
+        icon: "💥"
+      },
+      {
+        code: "woof woof",
+        category: "game",
+        categoryLabel: "Map & Match",
+        description: "Turns flying birds into flying dogs wearing capes.",
+        icon: "🐶"
+      }
+    ];
+
+    let currentCategory = 'all';
+    let currentSearch = '';
+    let toastTimeout = null;
+
+    // Render Cards Function
+    function renderCards() {
+      const grid = document.getElementById('cheatGrid');
+      const noResults = document.getElementById('noResults');
+
+      const filtered = cheats.filter(item => {
+        const matchesCategory = currentCategory === 'all' || item.category === currentCategory;
+        const matchesSearch = item.code.toLowerCase().includes(currentSearch.toLowerCase()) || 
+                              item.description.toLowerCase().includes(currentSearch.toLowerCase());
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        noResults.classList.remove('hidden');
+        return;
+      }
+
+      noResults.classList.add('hidden');
+      grid.innerHTML = filtered.map(item => `
+        <div 
+          onclick="copyCheat('${item.code.replace(/'/g, "\\'")}', this)"
+          class="cheat-card group relative bg-aoe-cardBg hover:bg-neutral-900 border border-aoe-cardBorder hover:border-aoe-gold rounded-xl p-5 cursor-pointer transition-all duration-200 flex flex-col justify-between shadow-lg hover:shadow-[0_4px_20px_rgba(212,175,55,0.15)] active:scale-[0.98]"
+        >
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-2xl">${item.icon}</span>
+              <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border border-amber-900/40 bg-amber-950/40 text-amber-400">
+                ${item.categoryLabel}
+              </span>
+            </div>
+            
+            <h3 class="font-mono text-lg font-bold text-aoe-gold group-hover:text-aoe-goldHover tracking-wide break-words mb-2 flex items-center gap-1.5">
+              <span>"${item.code}"</span>
+            </h3>
+
+            <p class="text-xs text-amber-200/70 leading-relaxed mb-4">
+              ${item.description}
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-aoe-cardBorder/40 flex items-center justify-between text-xs">
+            <span class="text-amber-200/40 group-hover:text-amber-200/70 transition-colors">
+              Click card to copy
+            </span>
+            <span class="copy-btn-text bg-amber-950 group-hover:bg-aoe-gold text-aoe-gold group-hover:text-black font-semibold px-3 py-1 rounded transition-colors flex items-center gap-1 border border-aoe-gold/40">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+              </svg>
+              <span>Copy</span>
+            </span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Copy to Clipboard Action
+    function copyCheat(codeText, cardEl) {
+      // Fallback for iFrame clipboard compatibility
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(codeText).catch(() => {
+          fallbackCopyTextToClipboard(codeText);
+        });
+      } else {
+        fallbackCopyTextToClipboard(codeText);
+      }
+
+      // Visual feedback on card
+      const copyBtn = cardEl.querySelector('.copy-btn-text');
+      if (copyBtn) {
+        const originalContent = copyBtn.innerHTML;
+        copyBtn.innerHTML = `
+          <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <span class="text-emerald-400 font-bold">Copied!</span>
+        `;
+        copyBtn.classList.add('border-emerald-500/50', 'bg-emerald-950/40');
+        
+        setTimeout(() => {
+          copyBtn.innerHTML = originalContent;
+          copyBtn.classList.remove('border-emerald-500/50', 'bg-emerald-950/40');
+        }, 1200);
+      }
+
+      // Show Toast Notification
+      showToast(codeText);
+    }
+
+    // Legacy fallback copy mechanism
+    function fallbackCopyTextToClipboard(text) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+      } catch (err) {
+        console.error('Fallback copy failed', err);
+      }
+      document.body.removeChild(textArea);
+    }
+
+    // Toast Notification System
+    function showToast(codeText) {
+      const toast = document.getElementById('toast');
+      const toastCode = document.getElementById('toastCode');
+
+      toastCode.textContent = `"${codeText}"`;
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    // Category Filter Switcher
+    function filterCategory(cat) {
+      currentCategory = cat;
+      
+      // Update Tab Styles
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-aoe-gold', 'text-black', 'border-aoe-gold', 'shadow-[0_0_12px_rgba(212,175,55,0.2)]');
+        btn.classList.add('bg-aoe-cardBg', 'text-amber-200/80', 'border-aoe-cardBorder');
+      });
+
+      const activeTab = document.getElementById(`tab-${cat}`);
+      if (activeTab) {
+        activeTab.classList.remove('bg-aoe-cardBg', 'text-amber-200/80', 'border-aoe-cardBorder');
+        activeTab.classList.add('bg-aoe-gold', 'text-black', 'border-aoe-gold', 'shadow-[0_0_12px_rgba(212,175,55,0.2)]');
+      }
+
+      renderCards();
+    }
+
+    // Search Input Listener
+    function handleSearch() {
+      currentSearch = document.getElementById('searchInput').value;
+      renderCards();
+    }
+
+    // Initial Load
+    window.onload = function() {
+      renderCards();
+    };
+  </script>
+</body>
+</html>
